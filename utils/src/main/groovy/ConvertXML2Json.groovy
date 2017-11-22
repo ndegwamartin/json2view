@@ -4,7 +4,6 @@ println "*** ConvertXML2Json *** "
 println "Still in experimental mode :("
 println()
 
-
 def inputFile = new File(this.args[0])
 
 if (!inputFile.exists()) {
@@ -12,9 +11,20 @@ if (!inputFile.exists()) {
     return
 }
 
+def inputFileName = (inputFile.getName().lastIndexOf('.').with {it != -1 ? inputFile.getName()[0..<it] : inputFile.getName()} ) + ".json"; 
+ 
 def layout = new XmlParser().parse(inputFile)
 
-println new groovy.json.JsonBuilder( createView(layout) ).toString();
+if(this.args.length > 1 && this.args[1] == "file"){
+
+def outputfile = new File(inputFileName);
+
+def jsonData = groovy.json.JsonOutput.prettyPrint(new groovy.json.JsonBuilder( createView(layout) ).toString());
+    outputfile.write jsonData;
+    println "Saving json view configuration file to " + inputFileName;
+}else{
+    println new groovy.json.JsonBuilder( createView(layout) ).toString();
+}
 
 View createView (node) {
 
@@ -37,9 +47,9 @@ View createView (node) {
 
 }
 
-Property createProperty (attribute) {
+Property createProperty (attribute) { sssss
 
-    def name = attribute.key.localPart;
+    def name = attribute.key.hasProperty("localPart") ? attribute.key.localPart : attribute.key;
     def type = "string";
     def value =  attribute.value;
 

@@ -1,19 +1,31 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply plugin: 'groovy'
 
-buildscript {
-    repositories {
-        jcenter()
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.1.6'
+}
+
+task runScript(dependsOn: 'classes', type: JavaExec) {
+    description 'Run Groovy script'
+
+    // Set main property to name of Groovy script class.
+    main = 'ConvertXML2Json'
+
+    // Set classpath for running the Groovy script.
+    classpath = sourceSets.main.runtimeClasspath
+
+    if (project.hasProperty('xml')) {
+        // Pass command-line argument to script.
+        args new File(".").absolutePath + File.separator + project.getProperty('xml')
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.2'
 
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+    if (project.hasProperty('output')) {
+        // Pass output type command-line argument to script.
+        args project.getProperty('output')
     }
 }
 
-allprojects {
-    repositories {
-        jcenter()
-    }
-}
+defaultTasks 'runScript'

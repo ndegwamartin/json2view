@@ -118,6 +118,10 @@ try : <br/>
 ```
 from the root folder of the project
 
+to redirect output to a file named pathToImputXmlFile.json, use
+```
+./gradlew runScript -Pxml=./pathToInputXmlFile.xml -Poutput=file
+```
 
 ### Loading dynamic layout
 create and attach view in the specific Parent (created from xml) <br/>

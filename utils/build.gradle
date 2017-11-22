@@ -21,6 +21,11 @@ task runScript(dependsOn: 'classes', type: JavaExec) {
         // Pass command-line argument to script.
         args new File(".").absolutePath + File.separator + project.getProperty('xml')
     }
+
+    if (project.hasProperty('output')) {
+        // Pass output type command-line argument to script.
+        args project.getProperty('output')
+    }
 }
 
 defaultTasks 'runScript'
